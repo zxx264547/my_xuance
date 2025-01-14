@@ -1,0 +1,80 @@
+project_name: "Xx_MADDPG"
+
+dl_toolbox: "torch"  # The deep learning toolbox. Choices: "torch", "mindspore", "tensorlayer"
+
+# 日志工具
+logger: "tensorboard"  # Choices: tensorboard, wandb.
+wandb_user_name: "your_user_name"
+
+# 渲染与测试设置
+test: True
+test_mode: False
+render: True
+render_mode: 'rgb_array' # Choices: 'human', 'rgb_array'.
+fps: 5
+
+# RNN设置
+use_rnn: False
+rnn: "LSTM"
+fc_hidden_sizes: [128, 64]
+recurrent_hidden_size: 64
+#representation: "Basic_RNN"
+representation: "Basic_MLP"
+dropout: 0.1
+N_recurrent_layers: 2
+representation_hidden_size: [64,64]  # the units for each hidden layer
+actor_hidden_size: [64, 64]
+critic_hidden_size: [64, 64]
+activation: 'leaky_relu'
+activation_action: 'sigmoid'
+
+device: "cuda:0"
+
+# 算法与环境设置
+agent: "MADDPG"  # the learning algorithms_marl
+env_name: "IEEE13"
+env_id: "IEEE13"
+env_seed: 1
+continuous_action: True
+learner: "MADDPG_Learner"
+policy: "MADDPG_Policy"
+learning_rate_actor: 0.01  # learning rate for actor
+learning_rate_critic: 0.001  # learning rate for critic
+gamma: 0.95  # discount factor
+tau: 0.001  # soft update for target networks
+vectorize: "SubprocVecMultiAgentEnv"
+
+use_parameter_sharing: False
+use_actions_mask: False
+
+# 训练与优化相关设置
+seed: 1
+parallels: 1
+buffer_size: 100000
+batch_size: 128
+start_noise: 1
+end_noise: 0.01
+sigma: 0.1  # random noise for continuous actions
+start_training: 1000  # start training after n episodes
+running_steps: 50000
+training_frequency: 5
+distributed_training: False
+
+use_grad_clip: True
+grad_clip_norm: 0.5
+
+eval_interval: 1
+test_episode: 1
+#test_steps: 10000
+
+
+use_obsnorm: True
+use_rewnorm: True
+obsnorm_range: 1
+rewnorm_range: 1
+
+
+log_dir: "./logs/maddpg"
+model_dir: "./models/maddpg"
+
+
