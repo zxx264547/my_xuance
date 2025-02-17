@@ -8,7 +8,7 @@ from xuance.environment.single_agent_env import REGISTRY_ENV
 from xuance.environment.multi_agent_env import REGISTRY_MULTI_AGENT_ENV
 from xuance.environment.vector_envs import REGISTRY_VEC_ENV
 
-from xuance.environment.powerSystem.IEEE13 import IEEE13
+from xuance.environment.powerSystem.IEEE123 import IEEE123
 
 
 def make_envs(config: Namespace):

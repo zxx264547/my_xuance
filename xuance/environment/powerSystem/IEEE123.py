@@ -11,16 +11,20 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 
-
-class IEEE13(RawMultiAgentEnv):
+'''
+argus；
+    cofig:电网环境的配置，包括：
+        injection_bus（list）：智能体所在节点
+'''
+class IEEE123(RawMultiAgentEnv):
     def __init__(self, env_config, v0=1, vmax=1.05, vmin=0.95):
-        super(IEEE13, self).__init__()
+        super(IEEE123, self).__init__()
         self.obs_dim = 5
         # 定义智能体动作空间：13个智能体的动作空间为1维，3个智能体的动作空间为2维
         self.action_dims = [1] * 13 + [2] * 3
         # 初始化电网
-        self.injection_bus = np.array([10, 11, 16, 20, 33, 39, 48, 59, 66, 75, 83, 92, 104, 20, 30, 41]) - 1
-        self.network = create_123bus(self.injection_bus)
+        self.injection_bus = np.array(env_config.injection_bus) - 1
+        self.network = create_123bus(self.injection_bus, env_config.IEEE123_model_path)
 
         self.env_id = env_config.env_id
         self.num_agents = len(self.injection_bus)
@@ -43,16 +47,16 @@ class IEEE13(RawMultiAgentEnv):
         self.gen0_q = np.copy(self.network.sgen['q_mvar'])
 
         self.state = {}
-        self.load_p = pd.read_csv('F:/xuance\myCode\data\处理后的负载数据.csv', header=None)
+        self.load_p = pd.read_csv(env_config.load_p_filepath, header=None)
         # self.load_q = pd.read_csv('F:/xuance\myCode\data\load_q.csv')
-        self.pv_p = pd.read_csv('F:/xuance\myCode\data\处理后的光伏数据.csv', header=None)
+        self.pv_p = pd.read_csv(env_config.pv_p_filepath, header=None)
         self.selected_loads_index = []
         self.selected_pvs_index = []
 
         self.max_episode_steps = 96 - 1
 
         self.log_node_voltage = []
-
+        self.log_save_path = env_config.log_save_path
 
         # # 初始化 TensorBoard 的 SummaryWriter
         # # 获取当前时间并格式化为字符串
@@ -121,23 +125,6 @@ class IEEE13(RawMultiAgentEnv):
     def step(self, action_dict):
         self._current_step += 1
 
-        # # 应用智能体的动作
-        # for i, agent in enumerate(self.agents):
-        #     # 从 action_dict 中获取该智能体的动作
-        #     action = action_dict[agent]
-        #     # 将动作值赋给 `self.network.sgen` 的 q_mvar 列
-        #     if action is not None:
-        #         # 根据动作维度分别处理
-        #         if self.action_dims[i] == 1:  # 1维动作
-        #             # 将动作值赋给 self.network.sgen 的 q_mvar 列
-        #             self.network.sgen.at[i, 'q_mvar'] = action[0]
-        #             self.network.sgen.at[i, 'p_mw'] = self.pv_p.iloc[self._current_step, self.selected_pvs_index[i]]
-        #         elif self.action_dims[i] == 2:  # 2维动作
-        #             self.network.sgen.at[i, 'q_mvar'] = action[0]
-        #             self.network.sgen.at[i, 'p_mw'] = action[1]
-        #     else:
-        #         print(f"No action found for {agent}")
-
         # 设置每个节点的负载功率
         for i, index in enumerate(self.network.load.index):
             self.network.load.at[index, 'p_mw'] = self.load_p.iloc[self._current_step, self.selected_loads_index[i]]
@@ -193,10 +180,10 @@ class IEEE13(RawMultiAgentEnv):
 
         # 记录该时刻，电网所有节点电压情况
         node_voltages = np.array(self.network.res_bus.vm_pu)  # 每个节点的电压（p.u.）
-        nodes = self.network.bus.index  # 节点索引
+        # nodes = self.network.bus.index  # 节点索引
         self.log_node_voltage.append(node_voltages)
         if self._current_step >= 95:
-            np.save(f'F:/xuance/myCode/logs/node_voltage.npy', np.array(self.log_node_voltage))
+            np.save(self.log_save_path, np.array(self.log_node_voltage))
 
         info = {
             "agent_actions": action_dict,
@@ -240,8 +227,8 @@ class IEEE13(RawMultiAgentEnv):
     def close(self):
         return
 
-def create_123bus(injection_bus):
-    pp_net = pp.converter.from_mpc('F:/xuance/myCode/pandapower models/case_123.mat', casename_mpc_file='case_mpc')
+def create_123bus(injection_bus, IEEE123_model_path):
+    pp_net = pp.converter.from_mpc(IEEE123_model_path, casename_mpc_file='case_mpc')
     for bus in injection_bus:
         pp.create_sgen(pp_net, bus, p_mw=0, q_mvar=0)
 

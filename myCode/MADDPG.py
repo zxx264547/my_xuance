@@ -11,6 +11,8 @@ import argparse
 if __name__ == "__main__":
     config_dict = get_configs(file_dir="Configs/MADDPG_configs.yaml")
     configs = argparse.Namespace(**config_dict)
+
+
     envs = make_envs(configs)
     Agent = MADDPG_Agents(config=configs, envs=envs)
     if configs.test:

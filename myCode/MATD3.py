@@ -11,6 +11,13 @@ from xuance.torch.agents import MATD3_Agents
 if __name__ == "__main__":
     config_dict = get_configs(file_dir="Configs/MATD3_configs.yaml")
     configs = argparse.Namespace(**config_dict)
+    '''
+    在主文件中进行参数配置，用于kaggle
+    '''
+    configs.start_training = 0
+    configs.running_steps = 100
+    configs.test = False
+
     envs = make_envs(configs)
     Agent = MATD3_Agents(config=configs, envs=envs)
     if configs.test:
