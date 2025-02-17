@@ -45,6 +45,7 @@ class OffPolicyMARLAgents(MARLAgents):
         self.log_reward = []
         self.log_voltage_violaton = []
         self.log_episode_mean_reward = []
+        self.log_save_path = config.log_save_path
 
     def _build_memory(self):
         """Build replay buffer for models training
@@ -245,10 +246,10 @@ class OffPolicyMARLAgents(MARLAgents):
                     process_bar.update((self.current_step - step_last) // self.n_envs)
                     step_last = deepcopy(self.current_step)
                 # 手动记录数据
-                np.save(f'F:/xuance/myCode/logs/log_reward_{self.config.agent}.npy', np.array(self.log_reward))
-                np.save(f'F:/xuance/myCode/logs/log_powerloss_{self.config.agent}.npy', np.array(self.log_powerloss))
-                np.save(f'F:/xuance/myCode/logs/log_voltage_violation_{self.config.agent}.npy', np.array(self.log_voltage_violaton))
-                np.save(f'F:/xuance/myCode/logs/log_episode_mean_reward_{self.config.agent}.npy', np.array(self.log_episode_mean_reward))
+                np.save(f'{self.log_save_path}/log_reward_{self.config.agent}.npy', np.array(self.log_reward))
+                np.save(f'{self.log_save_path}/log_powerloss_{self.config.agent}.npy', np.array(self.log_powerloss))
+                np.save(f'{self.log_save_path}/log_voltage_violation_{self.config.agent}.npy', np.array(self.log_voltage_violaton))
+                np.save(f'{self.log_save_path}/log_episode_mean_reward_{self.config.agent}.npy', np.array(self.log_episode_mean_reward))
 
                 process_bar.update(n_steps - process_bar.last_print_n)
             return
@@ -282,11 +283,11 @@ class OffPolicyMARLAgents(MARLAgents):
 
             if self.current_step >= n_steps - 1:
                 # 手动记录数据的代码
-                np.save(f'F:/xuance/myCode/logs/log_reward_{self.config.agent}.npy', np.array(self.log_reward))
-                np.save(f'F:/xuance/myCode/logs/log_powerloss_{self.config.agent}.npy', np.array(self.log_powerloss))
-                np.save(f'F:/xuance/myCode/logs/log_voltage_violation_{self.config.agent}.npy',
+                np.save(f'{self.log_save_path}/log_reward_{self.config.agent}.npy', np.array(self.log_reward))
+                np.save(f'{self.log_save_path}/log_powerloss_{self.config.agent}.npy', np.array(self.log_powerloss))
+                np.save(f'{self.log_save_path}/log_voltage_violation_{self.config.agent}.npy',
                     np.array(self.log_voltage_violaton))
-                np.save(f'F:/xuance/myCode/logs/log_episode_mean_reward_{self.config.agent}.npy',
+                np.save(f'{self.log_save_path}/log_episode_mean_reward_{self.config.agent}.npy',
                         np.array(self.log_episode_mean_reward))
 
 

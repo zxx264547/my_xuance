@@ -15,7 +15,7 @@ if __name__ == "__main__":
     在主文件中进行参数配置，用于kaggle
     '''
     configs.start_training = 0
-    configs.running_steps = 100
+    configs.running_steps = 10000
     configs.test = False
 
     envs = make_envs(configs)

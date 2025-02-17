@@ -183,7 +183,7 @@ class IEEE123(RawMultiAgentEnv):
         # nodes = self.network.bus.index  # 节点索引
         self.log_node_voltage.append(node_voltages)
         if self._current_step >= 95:
-            np.save(self.log_save_path, np.array(self.log_node_voltage))
+            np.save(f"{self.log_save_path}/node_voltage.npy", np.array(self.log_node_voltage))
 
         info = {
             "agent_actions": action_dict,

@@ -60,4 +60,4 @@ injection_bus: [10, 11, 16, 20, 33, 39, 48, 59, 66, 75, 83, 92, 104, 20, 30, 41]
 load_p_filepath: 'F:/xuance\myCode\data\处理后的负载数据.csv'
 pv_p_filepath: 'F:/xuance\myCode\data\处理后的光伏数据.csv'
 IEEE123_model_path: 'F:/xuance/myCode/pandapower models/case_123.mat'
-log_save_path: 'F:/xuance/myCode/logs/node_voltage.npy'
+log_save_path: 'F:/xuance/myCode/logs'
