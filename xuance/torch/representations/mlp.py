@@ -17,8 +17,6 @@ class Basic_Identical(Module):
 
     def forward(self, observations: np.ndarray):
         state = torch.as_tensor(observations, dtype=torch.float32, device=self.device)
-        # debug
-        print("state is on device:", state.device)
         return {'state': state}
 
 

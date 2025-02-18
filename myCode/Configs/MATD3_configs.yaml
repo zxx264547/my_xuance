@@ -1,6 +1,6 @@
 agent: "MATD3"  # the learning algorithms_marl
-env_name: "IEEE13"
-env_id: "IEEE13"
+env_name: "IEEE123"
+env_id: "IEEE123"
 env_seed: 1
 continuous_action: True
 learner: "MATD3_Learner"
@@ -30,8 +30,8 @@ actor_update_delay: 2
 start_noise: 1.0
 end_noise: 0.01
 sigma: 0.1  # random noise for continuous actions
-start_training: 1000  # start training after n episodes
-running_steps: 50000
+start_training: 100  # start training after n episodes
+running_steps: 1000
 training_frequency: 5
 
 distributed_training: False
@@ -40,7 +40,7 @@ device: "cuda:0"
 
 logger: "tensorboard"
 # 渲染与测试设置
-test: True
+test: False
 test_mode: False
 render: True
 render_mode: 'rgb_array' # Choices: 'human', 'rgb_array'.
